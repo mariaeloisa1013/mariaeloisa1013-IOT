@@ -4,12 +4,13 @@ import joblib
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, OneHotEncoder, LabelEncoder
 from sklearn.compose import ColumnTransformer
+import os 
 
 file_paths = ['Personal_Data/anon1.csv', 'Personal_Data/anon2.csv', 'Personal_Data/anon3.csv']
 dataframes = [pd.read_csv(file, encoding='latin-1', skipinitialspace=True) 
               for file in file_paths]
 
-# merging all datasets
+# MERGE DATASETS ----------------------------------
 df_master = pd.concat(dataframes, ignore_index=True) 
 
 # removing duplicate columns
@@ -20,7 +21,7 @@ print(f"\n! Merged Datasets: SHAPE {df_master.shape}")
 df_master = df_master.rename(columns={'id': 'Activity ID'}, errors='ignore') 
 
 
-cols_to_drop = [ # drop unecessary columns
+cols_to_drop = [ # drop unnecessary columns
     'Activity Date', 'Activity Name', 'Activity Description', 'Relative Effort', 'Commute',
     'Activity Private Note', 'Activity Gear', 'Filename', 'Athlete Weight', 'Bike Weight',
     'Elapsed Time', 
@@ -37,7 +38,8 @@ cols_to_drop = [ # drop unecessary columns
     'Dirt Distance', 'Newly Explored Distance', 'Newly Explored Dirt Distance',
     'Activity Count', 'Total Steps', 'Carbon Saved', 'Pool Length', 'Training Load',
     'Intensity', 'Average Grade Adjusted Pace', 'Timer Time', 'Total Cycles', 'Recovery',
-    'With Pet', 'Competition', 'Long Run', 'For a Cause', 'Media'
+    'With Pet', 'Competition', 'Long Run', 'For a Cause', 'Media',
+
 ]
 
 df_clean = df_master.drop(columns=cols_to_drop, errors='ignore')
@@ -48,7 +50,7 @@ df_clean = df_clean.rename(columns={'Elapsed Time.1': 'Elapsed Time',
 print(f"\n! Selected Columns: SHAPE {df_clean.shape}")
 
 
-## CLEAN TIME AND DATES
+# CLEAN TIME AND DATES -----------------------------
 
 # convert to datetime objects
 df_master['Activity Date'] = pd.to_datetime(df_master['Activity Date'], errors='coerce')
@@ -64,25 +66,31 @@ df_clean = df_clean.drop(columns=['Distance'])
 print("\n! Successfully cleaned Date and Time Features")
 
 
-##  handling the missing values
+# HANDLE MISSING VALUES -----------------------------
 
-# columns that will be = 0 if missing
-sensor_cols = ['Max Heart Rate', 'Average Heart Rate', 'Max Cadence', 'Average Cadence',
-               'Max Watts', 'Average Watts', 'Calories']
+# Define sparse columns for imputation AND flagging
+sparse_sensor_cols = ['Max Heart Rate', 'Max Cadence', 'Average Cadence',
+                      'Max Watts', 'Average Watts', 'Calories', 'Average Heart Rate']
 
-# coloumns to fill NAN values with 0
-for col in sensor_cols:
+# Binary Flag Feature Engineering
+for col in sparse_sensor_cols:
+    df_clean[f'{col}_Recorded'] = df_clean[col].notna().astype(int)
+print("! Created Binary Flag features for sparse sensor data.")
+
+# impute 0
+for col in sparse_sensor_cols:
     df_clean[col] = pd.to_numeric(df_clean[col], errors='coerce').fillna(0)
     
-# coloumns to fill NAN values with median
+# median IMPUTATION
 numerical_cols = df_clean.select_dtypes(include=np.number).columns.tolist()
 for col in numerical_cols:
+    # median imputation
     df_clean[col] = df_clean[col].fillna(df_clean[col].median()) 
 
-print("\n! Imputed NAN values")
+print("! Imputed NAN values")
 
 
-## PREPARE FEATURES AND TARGET
+# PREPARE FEATURES AND TARGET -----------------------------
 
 df_clean = df_clean.dropna(subset=['Activity Type', 'Activity ID']) 
 
@@ -102,9 +110,10 @@ print(f"\nTarget Classes Converted: {le.classes_}")
 print(f"Shape after Preparing Features and Target: {X.shape}")
 
 
-## ONE-HOT ENCODING AND SCALING 
+# ONE-HOT ENCODING AND SCALING -----------------------------
 
 numerical_features = X.select_dtypes(include=np.number).columns.tolist()
+
 if 'Activity ID' in numerical_features:
     numerical_features.remove('Activity ID')
     
@@ -128,7 +137,7 @@ cat_names = list(preprocessor.named_transformers_['cat'].get_feature_names_out(c
 feature_names = num_names + cat_names
 
 
-## CREATE FINAL CSV
+# CREATE FINAL CSV ---------------------------------
 
 # convert NumPy back to DataFrame
 X_processed_df = pd.DataFrame(X_processed, columns=feature_names)

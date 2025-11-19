@@ -11,7 +11,16 @@ from SecurityLibrary import generate_hmac, encrypt_id, get_fernet_key, get_hmac_
 # Load datasets
 df_train = pd.read_csv("../Data_Preprocessing/FINALpublicdataset.csv") # For Training
 df_predict = pd.read_csv("../Data_Preprocessing/FINALpersonaldataset.csv") # For Testing
-features = ["Distance_km", "Elapsed Time", "Moving Time", "Elevation Gain", "Average Speed", "Calories", "Average Heart Rate"]
+features = [
+    "Distance_km", 
+    "Elapsed Time", 
+    "Moving Time", 
+    "Average Speed", 
+    "Elevation Gain", 
+    "Max Speed",
+    "Max Grade",
+    "Average Grade"
+]
 print(f"Columns available in df_predict: {df_predict.columns.tolist()}")
 
 # MODEL -------------------------------------
