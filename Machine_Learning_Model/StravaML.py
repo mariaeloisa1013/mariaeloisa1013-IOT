@@ -43,14 +43,15 @@ df_predict["Predicted Activity Type"] = model.predict(X_test)
 # SECURITY CONFIGURATIONS ------------------------
 
 # Data Masking: Cryptography
-df_predict["Encrypted ID"] = df_predict["Activity ID"].astype(str).apply(encrypt_id) 
+df_predict["Encrypted ID"] = (df_predict["Activity ID"].astype(str).apply(encrypt_id).apply(lambda b: b.decode('utf-8'))
+)
 
 # Integrity/Authenticity Checker: HMAC (hides the Encrypted ID, the Actual type, and the Predicted type.) 
 df_predict['Integrity_MAC'] = df_predict.apply(lambda row: generate_hmac(
     pd.Series([row['Encrypted ID'], row['Activity Type'], row['Predicted Activity Type']])
 ), axis=1)
 
-# Dataaframe for Verifier
+# Dataframe for Verifier
 secured_output_filename = "SecuredData.csv"
 secured_output_df = df_predict[[
     'Encrypted ID',      
@@ -60,26 +61,7 @@ secured_output_df = df_predict[[
 ]].copy()
 
 secured_output_df.to_csv(secured_output_filename, index=False)
-print(f"\nSaved secured data for audit to {secured_output_filename}")
-
-
-# RESULTS & SNAPSHOTS -------------------------------------
-
-result = df_predict[features].copy() 
-
-# Insert the security columns and comparison column
-result.insert(0, "Encrypted ID", df_predict["Encrypted ID"]) 
-result.insert(8, "Actual Activity Type", df_predict["Activity Type"]) 
-result["Predicted Activity Type"] = df_predict["Predicted Activity Type"]
-result["Integrity_MAC"] = df_predict["Integrity_MAC"]
-
-# Print the enhanced table
-print("\n--- Predictions vs. Actual Activity Type (Secured Output) ---\n")
-print(result.to_string(index=False))
-
-# Raw Data Snapshot
-print("\nSecurity Data Snapshot (First 3 Rows):")
-print(df_predict[['Activity ID', 'Encrypted ID', 'Integrity_MAC']].head(3).to_string(index=False))
+print(f"\nSaved the secured dataset for audit in {secured_output_filename}")
 
 # EVALUATION METRICS -------------------------------------
 
@@ -129,7 +111,25 @@ plt.show()
 print("\nCompleted all tasks successfully.")
 print(f"Overall Model Accuracy: {overall_accuracy_pct:.2f}%\n") # Print overall accuracy
 
+# RESULTS & SNAPSHOTS -------------------------------------
+
+result = df_predict[features].copy() 
+
+# Insert the security columns and comparison column
+result.insert(0, "Encrypted ID", df_predict["Encrypted ID"]) 
+result.insert(8, "Actual Activity Type", df_predict["Activity Type"]) 
+result["Predicted Activity Type"] = df_predict["Predicted Activity Type"]
+result["Integrity_MAC"] = df_predict["Integrity_MAC"]
+
+# Print the enhanced table
+print("\n--- Predictions vs. Actual Activity Type (Secured Output) ---\n")
+print(result.to_string(index=False))
+
+# Raw Data Snapshot
+print("\nSECURITY SNAPSHOTS :")
+print(df_predict[['Activity ID', 'Encrypted ID', 'Integrity_MAC']].head(3).to_string(index=False))
+
 # SECURITY KEYS -------------------------------------
 
-print(f"\nFERNET ENCRYPTION KEY (for decryption): {get_fernet_key().decode()}")
-print(f"\nHMAC SECRET KEY (for verification): {get_hmac_key()}\n")
+print(f"\n!! FERNET ENCRYPTION KEY (for decryption): \n{get_fernet_key().decode()}")
+print(f"\n\n!! HMAC SECRET KEY (for verification): \n{get_hmac_key()}\n\n")
