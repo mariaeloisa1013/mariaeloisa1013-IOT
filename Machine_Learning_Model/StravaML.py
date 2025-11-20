@@ -43,7 +43,7 @@ df_predict["Predicted Activity Type"] = model.predict(X_test)
 # SECURITY CONFIGURATIONS ------------------------
 
 # Data Masking: Cryptography
-df_predict["Encrypted ID"] = (df_predict["Activity ID"].astype(str).apply(encrypt_id).apply(lambda b: b.decode('utf-8'))
+df_predict["Encrypted ID"] = (df_predict["Activity ID"].astype(str).apply(encrypt_id).apply(lambda b: b.decode('utf-8')) 
 )
 
 # Integrity/Authenticity Checker: HMAC (hides the Encrypted ID, the Actual type, and the Predicted type.) 

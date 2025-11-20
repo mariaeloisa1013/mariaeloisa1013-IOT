@@ -147,7 +147,7 @@ X_processed_df.insert(loc=0, column='Activity ID', value=Activity_ID.values)
 X_processed_df.insert(loc=1, column='Activity Type', value=Activity_Type.values)
 
 
-final_csv_filename = "FINALpersonaldataset.csv"
+final_csv_filename = "FINALpublicdataset.csv"
 X_processed_df.to_csv(final_csv_filename, index=False)
 
 # LABEL ENCODER
