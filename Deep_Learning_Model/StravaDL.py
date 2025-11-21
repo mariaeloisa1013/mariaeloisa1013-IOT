@@ -14,24 +14,26 @@ from sklearn.metrics import (
     recall_score,
     f1_score,
 )
+import getpass 
+import hashlib
+import base64
 import tensorflow as tf
 from tensorflow.keras import layers, models, callbacks
 import joblib
 
-import getpass 
-import hashlib
-import base64
+# --- SECURITY CONFIGURATION ---
+
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.backends import default_backend
+
 
 MODEL_FILENAME = "strava_activity_classify.keras"
 PREPROCESSOR_FILENAME = "preprocessor.pkl"
 LABEL_ENCODER_FILENAME = "label_encoder.pkl"
 INTEGRITY_HASH_FILE = "model_integrity_hash.txt" 
 SALT_FILE = "encryption_salt.bin" 
-
 
 # Set all random seeds for reproducibility
 def set_seed(seed=42):
@@ -48,19 +50,18 @@ def set_seed(seed=42):
 set_seed(42)
 
 
-# SECURITY FUNCTIONS --------------------------------
+# SECURITY FUNCTIONS -----------------------------
 
 def get_secure_password():
     """Prompts the user for the encryption key securely."""
     print("\n--- SECURE KEY INPUT REQUIRED ---")
-    password = getpass.getpass("Enter Encryption Key: ")
+    password = getpass.getpass("Enter Encryption Key (to encrypt model): ")
     print("-----------------------------------")
     return password.encode()
 
 
 def _get_fernet_key(password_bytes, salt_file=SALT_FILE):
     """Derives a strong encryption key from the password and a stored salt."""
-    
     # 1. Load or generate a unique salt
     if not os.path.exists(salt_file):
         salt = os.urandom(16)
@@ -75,7 +76,7 @@ def _get_fernet_key(password_bytes, salt_file=SALT_FILE):
         algorithm=hashes.SHA256(),
         length=32,
         salt=salt,
-        iterations=480000,
+        iterations=300000,
         backend=default_backend()
     )
     
@@ -93,17 +94,6 @@ def calculate_hash(filepath):
                 break
             hasher.update(chunk)
     return hasher.hexdigest()
-
-def check_file_integrity(filepath, expected_hash):
-    """Checks file integrity against a stored hash."""
-    if not os.path.exists(filepath): return False
-    current_hash = calculate_hash(filepath)
-    if current_hash == expected_hash:
-        print(f"✅ INTEGRITY CHECK: {os.path.basename(filepath)} is UNMODIFIED (Hash Match).")
-        return True
-    else:
-        print(f"❌ INTEGRITY CHECK: {os.path.basename(filepath)} has been TAMPERED with!")
-        return False
 
 def secure_store_model(filename, password_bytes):
     """Encrypts the file directly using AES-GCM (Cryptography At Rest)."""
@@ -126,30 +116,10 @@ def secure_store_model(filename, password_bytes):
     except Exception as e:
         print(f"❌ SECURITY ERROR: Failed to encrypt {filename}. {e}")
 
-def load_secure_model(encrypted_filename, password_bytes):
-    """Decrypts the file and writes the plaintext for loading and verification."""
-    plaintext_filename = encrypted_filename.replace(".enc", "")
-    try:
-        f = _get_fernet_key(password_bytes)
-        
-        with open(encrypted_filename, 'rb') as file:
-            encrypted_data = file.read()
-            
-        decrypted_data = f.decrypt(encrypted_data)
-        
-        with open(plaintext_filename, 'wb') as file:
-            file.write(decrypted_data)
-            
-        print(f"✅ DECRYPTION SUCCESSFUL: '{encrypted_filename}' extracted to '{plaintext_filename}'.")
-        return plaintext_filename 
-        
-    except Exception as e:
-        # Catches bad key, file corruption, or tampering due to Fernet's authentication tag
-        print(f"❌ DECRYPTION FAILED. Invalid key, file corruption, or tampering detected: {e}")
-        return None 
 
 
-# Load the datasets
+# Load the datasets ---------------------
+
 train_file = "../Data_Preprocessing/FINALpublicdataset.csv"
 test_file = "../Data_Preprocessing/FINALpersonaldataset.csv"
 
@@ -377,13 +347,37 @@ plt.tight_layout()
 plt.show()
 
      
-# Save model, preprocessor, and label encoder
-model_filename = "strava_activity_classify.keras"
-model.save(model_filename)
+# Save plaintext model and preprocessors 
+model.save(MODEL_FILENAME)
+joblib.dump(preprocessor, PREPROCESSOR_FILENAME)
+joblib.dump(label_encoder, LABEL_ENCODER_FILENAME)
+print("\nPlaintext Model components saved temporarily.")
 
-joblib.dump(preprocessor, "preprocessor.pkl")
-joblib.dump(label_encoder, "label_encoder.pkl")
-print("\nPreprocessor and Label Encoder saved.")
+
+# START SECURITY DEMONSTRATION ---------------------------
+
+# 0. GET SECURE PASSWORD
+# This key is now used for all security functions below
+MODEL_KEY = get_secure_password()
+
+files_to_secure = [MODEL_FILENAME, PREPROCESSOR_FILENAME, LABEL_ENCODER_FILENAME]
+trusted_hashes = {}
+
+# 1. ESTABLISH INTEGRITY HASHES (The Trusted Fingerprints)
+print("\n--- 1. ESTABLISHING TRUSTED HASHES ---")
+with open(INTEGRITY_HASH_FILE, 'w') as f:
+    for filename in files_to_secure:
+        trusted_hash = calculate_hash(filename)
+        trusted_hashes[filename] = trusted_hash
+        f.write(f"{filename}:{trusted_hash}\n")
+        print(f"Hash calculated for {filename}: {trusted_hash[:8]}...")
+
+# 2. APPLY CRYPTOGRAPHY (Encryption At Rest)
+print("\n--- 2. APPLYING CRYPTOGRAPHY (AES-GCM Encryption) ---")
+for filename in files_to_secure:
+    secure_store_model(filename, MODEL_KEY) 
+
+# --- END SECURITY DEMONSTRATION (CREATE) ---
 
 print("\nCompleted all tasks successfully.")
-print(f"\nOverall Model Accuracy: {accuracy * 100:.1f}%\n")
+print(f"\nFinal model accuracy: {accuracy:.3f}\n")
