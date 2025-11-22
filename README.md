@@ -22,7 +22,7 @@ The final deliverable includes a comparative performance analysis and a practica
 The project requires core data science libraries, TensorFlow for Deep Learning, and specialized libraries for cryptographic security (pyzipper, cryptography).
 
 Install all necessary packages in one command:
-'''pip install pandas numpy scikit-learn tensorflow joblib matplotlib seaborn pyzipper cryptography getpass
+'''pip install pandas numpy scikit-learn tensorflow joblib matplotlib seaborn pyzipper cryptography getpass'''
 
 # Project Structure
 ```
@@ -124,4 +124,4 @@ Phase 3: Deep Learning Model (Training and Security Demonstration)
 
 
 ---------------------------------
-This project was developed by Maria Eloisa Butaslac, Hyacinth Ava Toribio, Sofia Lorin Borcelo [CS Y3 WKND: GROUP 4]
+**This project was developed by Maria Eloisa Butaslac, Hyacinth Ava Toribio, Sofia Lorin Borcelo [CS Y3 WKND: GROUP 4]**
