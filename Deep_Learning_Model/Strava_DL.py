@@ -472,6 +472,9 @@ model.save(model_filename)
 
 joblib.dump(preprocessor, "preprocessor.pkl")
 joblib.dump(label_encoder, "label_encoder.pkl")
+
+# added for VerifyRun.py: to save names of features
+joblib.dump(X_train.columns.tolist(), "preprocessor_input_features.pkl")
 print("\nPreprocessor and Label Encoder saved.")
 
 print("\nCompleted all tasks successfully.")

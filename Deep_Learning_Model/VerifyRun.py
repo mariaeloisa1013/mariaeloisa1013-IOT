@@ -4,6 +4,7 @@ import tensorflow as tf
 import getpass
 import hashlib
 import base64
+import pandas as pd 
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
@@ -21,6 +22,7 @@ SALT_FILE = "encryption_salt.bin"
 
 # Promps user for decryption key
 def get_secure_password():
+    print("\n----------------------------------------")
     print("!! SECURE KEY REQUIRED     ## realistically would be an external password")
     password = getpass.getpass("Enter DECRYPTION Key: ")
     return password.encode()
@@ -163,7 +165,7 @@ def main_deployment():
     if deployment_ready:  
         #  In actual IoT deployment, this is where live sensor data is used
         print("\n----------------------------------------")
-        print("REAL IOT SIMULATION (LIVE PREDICTION) ---")
+        print("REAL IOT SIMULATION (LIVE PREDICTION)")
 
         try:
             # As-if: loading files from secure storage to RAM
@@ -171,32 +173,31 @@ def main_deployment():
                 custom_objects={'loss_fn': focal_loss_obj})
             preprocessor_loaded = joblib.load(PREPROCESSOR_FILENAME)
             label_encoder_loaded = joblib.load(LABEL_ENCODER_FILENAME)
+            original_input_features = joblib.load("preprocessor_input_features.pkl") 
+            num_features = len(original_input_features)
             
-            print("Ready For Interference...\n")
-        
+            # As-if: recorded raw data from IoT sensors 
+            dummy_array = np.random.rand(1, num_features).astype(np.float32)
+            dummy_input_df = pd.DataFrame(dummy_array, columns=original_input_features)
             
-            # Create dummy input data (must have the same 26 features as training)
-            # Replace this with real IoT sensor readings in production
-            dummy_input = np.random.rand(1, preprocessor_loaded.n_features_in_).astype(np.float32)
+            # As-if: Preprocess with the same format
+            processed_input = preprocessor_loaded.transform(dummy_input_df) 
             
-            # Preprocess the dummy data using the verified preprocessor
-            processed_input = preprocessor_loaded.transform(dummy_input)
-            
-            # Make a prediction
+            # Actual HAR Prediction
             prediction_proba = model_loaded.predict(processed_input, verbose=0)
             predicted_index = np.argmax(prediction_proba, axis=1)[0]
             predicted_activity = label_encoder_loaded.inverse_transform([predicted_index])[0]
             
-            print(f"Raw Input Features Shape: {dummy_input.shape}")
-            print(f"Predicted Activity: Index {predicted_index}")
-            print(f"Final Prediction: **{predicted_activity}**")
-            
+            print(f"\tRaw Input Features Shape: {dummy_input_df.shape}")
+            print(f"\tPredicted Activity: Index {predicted_index}")
+            print(f"\tFinal Prediction: {predicted_activity}")
+            print("\n! Pipeline Is Working Perfectly")
         except Exception as e:
             print(f"ERROR: {e}")
             
     else:
         print("\n----------------------------------------")
-        print("SECURITY FAILURE: Deployment is aborted.")
+        print("SECURITY FAILURE: Deployment is aborted")
 
     # Delete decrypted plaintext files
     print("\n----------------------------------------")
@@ -204,12 +205,11 @@ def main_deployment():
     for filename in decrypted_files:
         if os.path.exists(filename):
             os.remove(filename)
-            print(f"Cleaned up {filename}.")
+            print(f"\tCleaned up {filename}")
             
 
     print("\n----------------------------------------")
-    print("! MODEL IS RUN AND VERIFIED !")
+    print("! MODEL IS RUN AND VERIFIED !\n")
 
 if __name__ == "__main__":
     main_deployment()
-    
