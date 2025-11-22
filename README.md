@@ -14,15 +14,16 @@ The final deliverable includes a comparative performance analysis and a practica
 1. Environment Setup (Recommended)
     It is highly recommended to use a virtual environment (venv) to isolate project dependencies.
     - Create the virtual environment
-    python3 -m venv .venv
+    **python3 -m venv .venv**
     - Activate the virtual environment
-    source .venv/bin/activate
+    **source .venv/bin/activate**
 
 2. Dependency Installation
 The project requires core data science libraries, TensorFlow for Deep Learning, and specialized libraries for cryptographic security (pyzipper, cryptography).
 
 Install all necessary packages in one command:
-'''pip install pandas numpy scikit-learn tensorflow joblib matplotlib seaborn pyzipper cryptography getpass'''
+**pip install pandas numpy scikit-learn tensorflow joblib matplotlib seaborn pyzipper cryptography getpass**
+
 
 # Project Structure
 ```
@@ -75,32 +76,32 @@ SECURINGTHEIOT_AS1/
 Phase 1: Data Preprocessing (Creating the Final Dataset)
   This phase cleans the raw data, applies feature engineering, and saves the final preprocessed files required by the models.
 
-  1.Activate Environment:
+  1. Activate Environment:
     - Navigate to the Data_Preprocessing folder.
     - Activate its local environment:
-      - macOS/Linux: source .venv/bin/activate
-      - Windows (CMD): .\.venv\Scripts\activate.bat
+      - macOS/Linux: **source .venv/bin/activate**
+      - Windows (CMD): **.\.venv\Scripts\activate.bat**
   2. Run Cleaning Scripts: Execute the individual cleaning scripts. These scripts read the raw CSVs, apply transformations (imputation, scaling), and save the final clean CSVs.
-    - Personal Data: python Personal_Data/PSDataset_Cleaning.py
-    - Public Data: python Public_Data/PBDataset_Cleaning.py
+    - Personal Data: **python Personal_Data/PSDataset_Cleaning.py**
+    - Public Data: **python Public_Data/PBDataset_Cleaning.py**
   3. Verify Outputs: Confirm that the following files have been created in the Data_Preprocessing directory:
     - FINALPersonalDataset.csv / FINALPublicDataset.csv
     - LabelEncoder.pkl
     - PreProcessor.pkl (The scaling/encoding rules)
-  4. Deactivate Environment: deactivate
+  4. Deactivate Environment: **deactivate**
 
 Phase 2: Machine Learning Model (Baseline Comparison)
   This phase trains the simpler ML model for performance comparison (often using the same data and preprocessor rules).
   1. Activate Environment:
     - Navigate to the Machine_Learning_Model folder.
     - Activate its local environment:
-      - macOS/Linux: source .venv/bin/activate
-      - Windows (CMD): .\.venv\Scripts\activate.bat
+      - macOS/Linux: **source .venv/bin/activate**
+      - Windows (CMD): **.\.venv\Scripts\activate.bat**
   2. Run ML Script: Execute the ML training script.
-      - python Strava_ML.py
+      - **python Strava_ML.py**
   3. Verify Integrity: Run the integrity script to demonstrate security principles on the ML model's output (or data).
-    - python VerifyIntegrity.py
-  4. Deactivate Environment: deactivate
+    - **python VerifyIntegrity.py**
+  4. Deactivate Environment: **deactivate**
 
 Phase 3: Deep Learning Model (Training and Security Demonstration)
   This phase uses the processed data to train the FFNN model, establishes the trusted hash, encrypts the assets, and verifies integrity.
@@ -108,20 +109,20 @@ Phase 3: Deep Learning Model (Training and Security Demonstration)
   1. Activate Environment:
     - Navigate to the Deep_Learning_Model folder.
     - Activate its local environment:
-      - macOS/Linux: source .venv/bin/activate
-      - Windows (CMD): .\.venv\Scripts\activate.bat
+      - macOS/Linux: **source .venv/bin/activate**
+      - Windows (CMD): **.\.venv\Scripts\activate.bat**
   2. Run Main Model Script: Execute the DL script. This script will perform the full cycle (train, save, hash, encrypt, delete plaintext, decrypt, and verify).
-    - python Strava_DL.py
+    - **python Strava_DL.py**
   3. Verify Security Outputs: Confirm the script has generated the following encrypted files (and deleted their plaintext .pkl / .keras counterparts):
     - strava_activity_classify.keras.enc
     - label_encoder.pkl.enc
     - preprocessor.pkl.enc
     - model_integrity_hash.txt (Contains the trusted fingerprint)
   4. Test Verification (Optional): Run the verification script to ensure the security functions work independently.
-    - python VerifyRun.py
-  5. Deactivate Environment: deactivate
+    - **python VerifyRun.py**
+  5. Deactivate Environment: **deactivate**
 
 
 
 ---------------------------------
-**This project was developed by Maria Eloisa Butaslac, Hyacinth Ava Toribio, Sofia Lorin Borcelo [CS Y3 WKND: GROUP 4]**
+This project was developed by **Maria Eloisa Butaslac, Hyacinth Ava Toribio, Sofia Lorin Borcelo** [CS Y3 WKND: GROUP 4]
