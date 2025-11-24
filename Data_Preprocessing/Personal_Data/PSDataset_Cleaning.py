@@ -147,13 +147,13 @@ X_processed_df.insert(loc=0, column='Activity ID', value=Activity_ID.values)
 X_processed_df.insert(loc=1, column='Activity Type', value=Activity_Type.values)
 
 
-final_csv_filename = "FINALpersonaldataset.csv"
+final_csv_filename = "Data_Preprocessing/MERGEDpersonaldataset.csv"
 X_processed_df.to_csv(final_csv_filename, index=False)
 
 # LABEL ENCODER
-joblib.dump(le, "LabelEncoder.pkl")
+joblib.dump(le, "_ActivityLabelEncoder.pkl")
 # PREPROCESSOR
-joblib.dump(preprocessor, "PreProcessor.pkl") 
+joblib.dump(preprocessor, "_Scaling&OHE.pkl") 
 
 print(f"\nFINAL SHAPE: {X_processed_df.shape[1]} features")
 print(f"\tFinal Dataset saved at: {final_csv_filename}\n")
