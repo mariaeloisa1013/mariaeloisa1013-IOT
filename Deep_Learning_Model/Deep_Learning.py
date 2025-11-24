@@ -136,8 +136,8 @@ focal_loss = make_sparse_focal_loss(gamma=2.0)
 
      
 # Load datasets
-train_file = "Data_Preprocessing/FINALpersonaldataset.csv"
-test_file = "Data_Preprocessing/FINALpublicdataset.csv"
+train_file = "Data_Preprocessing/FINALpublicdataset.csv"
+test_file = "Data_Preprocessing/FINALpersonaldataset.csv"
 
 train_df = pd.read_csv(train_file)
 test_df = pd.read_csv(test_file)
