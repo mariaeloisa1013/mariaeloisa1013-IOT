@@ -5,8 +5,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, OneHotEncoder, LabelEncoder
 from sklearn.compose import ColumnTransformer
 import os 
-
-file_paths = ['Personal_Data/anon1.csv', 'Personal_Data/anon2.csv', 'Personal_Data/anon3.csv']
+    
+file_paths = ['Data_Preprocessing/Personal_Data/MariaButaslac.csv', 'Data_Preprocessing/Personal_Data/HyacinthToribio.csv', 'Data_Preprocessing/Personal_Data/SofiaBorcelo.csv']
 dataframes = [pd.read_csv(file, encoding='latin-1', skipinitialspace=True) 
               for file in file_paths]
 

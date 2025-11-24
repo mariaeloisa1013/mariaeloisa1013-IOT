@@ -6,7 +6,7 @@ from sklearn.preprocessing import StandardScaler, OneHotEncoder, LabelEncoder
 from sklearn.compose import ColumnTransformer
 import os 
 
-file_paths = ['Public_Data/public1.csv', 'Public_Data/public2.csv', 'Public_Data/public3.csv', 'Public_Data/public4.csv']
+file_paths = ['Data_Preprocessing/Public_Data/public2.csv', 'Data_Preprocessing/Public_Data/public2.csv', 'Data_Preprocessing/Public_Data/public3.csv', 'Data_Preprocessing/Public_Data/public4.csv']
 dataframes = [pd.read_csv(file, encoding='latin-1', skipinitialspace=True) 
               for file in file_paths]
 

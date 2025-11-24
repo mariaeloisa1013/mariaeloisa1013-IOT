@@ -9,8 +9,8 @@ from SecurityLibrary import generate_hmac, encrypt_id, get_fernet_key, get_hmac_
 # MODEL -------------------------------------
 
 # 1.  Load dataset
-df_train = pd.read_csv("../Data_Preprocessing/FINALpublicdataset.csv")    # Training Data
-df_test = pd.read_csv("../Data_Preprocessing/FINALpersonaldataset.csv")   # Testing Data
+df_train = pd.read_csv("Data_Preprocessing/FINALpersonaldataset.csv")    # Training Data
+df_test = pd.read_csv("Data_Preprocessing/FINALpersonaldataset.csv")   # Testing Data
 
 # 2. Defining features
 features = ["Distance_km", 

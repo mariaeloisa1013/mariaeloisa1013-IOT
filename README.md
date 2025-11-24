@@ -22,7 +22,7 @@ The final deliverable includes a comparative performance analysis and a practica
 The project requires core data science libraries, TensorFlow for Deep Learning, and specialized libraries for cryptographic security (pyzipper, cryptography).
 
 Install all necessary packages in one command:
-**pip install pandas numpy scikit-learn tensorflow joblib matplotlib seaborn pyzipper cryptography getpass**
+**pip install pandas numpy scikit-learn tensorflow joblib matplotlib seaborn pyzipper cryptography**
 
 
 # Project Structure
