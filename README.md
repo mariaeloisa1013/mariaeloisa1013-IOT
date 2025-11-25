@@ -23,7 +23,7 @@ The project requires core data science libraries, TensorFlow for Deep Learning, 
 
 Install all necessary packages in one command:
 
-- pip install pandas numpy scikit-learn tensorflow joblib matplotlib seaborn pyzipper cryptography
+pip install pandas numpy scikit-learn tensorflow joblib matplotlib seaborn pyzipper cryptography
 
 
 # Project Structure
@@ -80,16 +80,16 @@ SECURINGTHEIOT_AS1/
     - Navigate to the Data_Preprocessing folder.
     - Activate its local environment:
      
-      - macOS/Linux: **source .venv/bin/activate**
-      - Windows (CMD): **.\.venv\Scripts\activate.bat**
+     macOS/Linux: **source .venv/bin/activate**
+     Windows (CMD): **.\.venv\Scripts\activate.bat**
     
   2. Run Cleaning Scripts: Execute the individual cleaning scripts. These scripts read the raw CSVs, apply transformations (imputation, scaling), and save the final clean CSVs.
 
-    - **python Data_Preprocessing/PreProcessor.py**
+    python Data_Preprocessing/PreProcessor.py
     
   3. Verify Outputs: Confirm that the following files have been created in the Data_Preprocessing directory:
 
-    - MERGEDpersonaldataset.csv / MERGEDpublicdataset.csv
+    - MERGEDpersonaldataset.csv & MERGEDpublicdataset.csv
     - Security_Artifacts/DP_activity_label_encoder.pkl
     - Security_Artifacts/DP_main_preprocessor.pkl (The scaling/encoding rules)
 
@@ -104,11 +104,11 @@ SECURINGTHEIOT_AS1/
       - Windows (CMD): **.\.venv\Scripts\activate.bat**
   2. Run ML Script: Execute the ML training script.
 
-      - python Machine_Learning.py
+    python Machine_Learning.py
         
   3. Verify Integrity: Run the integrity script to demonstrate security principles on the ML model's output (or data).
 
-    - python SEC_verify_ML_integrity
+    python SEC_verify_ML_integrity
     
   4. Deactivate Environment: **deactivate**
 
@@ -125,7 +125,7 @@ SECURINGTHEIOT_AS1/
         
   2. Run Main Model Script: Execute the DL script. This script will perform the full cycle (train, save, hash, encrypt, delete plaintext, decrypt, and verify).
 
-    - python Deep_Learning.py
+    python Deep_Learning.py
     
   3. Verify Security Outputs: Confirm the script has generated the following encrypted files (and deleted their plaintext .pkl / .keras counterparts):
 
@@ -136,7 +136,7 @@ SECURINGTHEIOT_AS1/
     
   4. Test Verification (Optional): Run the verification script to ensure the security functions work independently.
      
-    - python SEC_verify_DL_integrity.py
+    python SEC_verify_DL_integrity.py
     
   5. Deactivate Environment: **deactivate**
 
