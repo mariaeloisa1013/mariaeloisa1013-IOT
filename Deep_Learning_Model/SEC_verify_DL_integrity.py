@@ -11,12 +11,11 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.backends import default_backend
 import numpy as np
 
-MODEL_FILENAME = "strava_activity_classify.keras"
-PREPROCESSOR_FILENAME = "preprocessor.pkl"
-LABEL_ENCODER_FILENAME = "label_encoder.pkl"
-INTEGRITY_HASH_FILE = "model_integrity_hash.txt" 
-SALT_FILE = "encryption_salt.bin" 
-
+MODEL_FILENAME = "Security_Artifacts/DL_encrypted.keras"
+INTEGRITY_HASH_FILE = "Security_Artifacts/DL_sha256_hash.txt" 
+SALT_FILE = "Security_Artifacts/DL_encryption_salt.bin" 
+PREPROCESSOR_FILENAME = "Security_Artifacts/DL_alignment_rules.pkl"
+LABEL_ENCODER_FILENAME = "Security_Artifacts/DL_label_mapping.pkl"
 
 # DECRYPTION FUNCTIONS ---------------------------------
 
@@ -173,7 +172,7 @@ def main_deployment():
                 custom_objects={'loss_fn': focal_loss_obj})
             preprocessor_loaded = joblib.load(PREPROCESSOR_FILENAME)
             label_encoder_loaded = joblib.load(LABEL_ENCODER_FILENAME)
-            original_input_features = joblib.load("preprocessor_input_features.pkl") 
+            original_input_features = joblib.load("Security_Artifacts/DL_alignment_record.pkl") 
             num_features = len(original_input_features)
             
             # As-if: recorded raw data from IoT sensors 

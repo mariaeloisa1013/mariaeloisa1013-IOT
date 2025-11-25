@@ -4,7 +4,7 @@ from sklearn.ensemble import RandomForestClassifier
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import confusion_matrix, classification_report, accuracy_score
-from SecurityLibrary import generate_hmac, encrypt_id, get_fernet_key, get_hmac_key # Security Library
+from SEC_library import generate_hmac, encrypt_id, get_fernet_key, get_hmac_key # Security Library
 
 # MODEL -------------------------------------
 
@@ -72,7 +72,7 @@ df_test['Integrity_MAC'] = df_test.apply(lambda row: generate_hmac(
 ), axis=1)
 
 # Dataframe for Verifier
-secured_output_filename = "SecuredData.csv"
+secured_output_filename = "Security_Artifacts/ML_encrypted_results.csv"
 secured_output_df = df_test[[
     'Encrypted ID',      
     'Activity Type', 

@@ -31,11 +31,11 @@ from cryptography.hazmat.backends import default_backend
 
 # SECURITY CONFIGURATIONS ------------------------------------
 
-MODEL_FILENAME = "strava_activity_classify.keras"
-INTEGRITY_HASH_FILE = "model_integrity_hash.txt" 
-SALT_FILE = "encryption_salt.bin" 
-PREPROCESSOR_FILENAME = "preprocessor.pkl"
-LABEL_ENCODER_FILENAME = "label_encoder.pkl"
+MODEL_FILENAME = "Security_Artifacts/DL_encrypted.keras"
+INTEGRITY_HASH_FILE = "Security_Artifacts/DL_sha256_hash.txt" 
+SALT_FILE = "Security_Artifacts/DL_encryption_salt.bin" 
+PREPROCESSOR_FILENAME = "Security_Artifacts/DL_alignment_rules.pkl"
+LABEL_ENCODER_FILENAME = "Security_Artifacts/DL_label_mapping.pkl"
 
 
 # Promps user for encryption key
@@ -467,14 +467,14 @@ plt.show()
 
      
 # Save model, preprocessor, and label encoder
-model_filename = "strava_activity_classify.keras"
+model_filename = "Security_Artifacts/DL_encrypted.keras"
 model.save(model_filename)
 
-joblib.dump(preprocessor, "preprocessor.pkl")
-joblib.dump(label_encoder, "label_encoder.pkl")
+joblib.dump(preprocessor, "Security_Artifacts/DL_alignment_rules.pkl")
+joblib.dump(label_encoder, "Security_Artifacts/DL_label_mapping.pkl")
 
 # added for VerifyRun.py: to save names of features
-joblib.dump(X_train.columns.tolist(), "preprocessor_input_features.pkl")
+joblib.dump(X_train.columns.tolist(), "Security_Artifacts/DL_alignment_record.pkl")
 print("\nPreprocessor and Label Encoder saved.")
 
 print("\nCompleted all tasks successfully.")

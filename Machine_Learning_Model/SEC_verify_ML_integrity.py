@@ -35,9 +35,9 @@ def verify_data_integrity(file_path, hmac_key_bytes):
             tamper_detected += 1
 
     if tamper_detected == 0:
-        print("\n✅ No Tampering Detected !! ")
+        print("✅ No Tampering Detected !!\n")
     else:
-        print(f"\n❌ TAMPERED: {tamper_detected} rows show signs of tampering.")
+        print(f"❌ TAMPERED: {tamper_detected} rows show signs of tampering.\n")
 
 
 # VERIFICATION AND USER INPUT -----------------------------
@@ -45,7 +45,7 @@ def verify_data_integrity(file_path, hmac_key_bytes):
 if __name__ == "__main__":
     
     print("\nVerifying HMAC.....")
-    key_input = input("Please enter the HMAC Key:\n>")
+    key_input = input("Please enter the HMAC Key:\n\t>")
     
     try:
         hmac_key_bytes = eval(key_input)
@@ -58,4 +58,4 @@ if __name__ == "__main__":
         exit()
 
     print("\nIntegrity Verification Ongoing...")
-    verify_data_integrity("SecuredData.csv", hmac_key_bytes)
+    verify_data_integrity("Security_Artifacts/ML_encrypted_results.csv", hmac_key_bytes)
