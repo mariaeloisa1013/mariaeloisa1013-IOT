@@ -73,7 +73,7 @@ SECURINGTHEIOT_AS1/
 
 # Execution Guide
 
-Phase 1: Data Preprocessing (Creating the Final Dataset)
+**Phase 1: Data Preprocessing (Creating the Final Dataset)**
   This phase cleans the raw data, applies feature engineering, and saves the final preprocessed files required by the models.
 
   1. Activate Environment:
@@ -83,19 +83,19 @@ Phase 1: Data Preprocessing (Creating the Final Dataset)
       - macOS/Linux: **source .venv/bin/activate**
       - Windows (CMD): **.\.venv\Scripts\activate.bat**
     
-  3. Run Cleaning Scripts: Execute the individual cleaning scripts. These scripts read the raw CSVs, apply transformations (imputation, scaling), and save the final clean CSVs.
+  2. Run Cleaning Scripts: Execute the individual cleaning scripts. These scripts read the raw CSVs, apply transformations (imputation, scaling), and save the final clean CSVs.
 
     - **python Data_Preprocessing/PreProcessor.py**
     
-  5. Verify Outputs: Confirm that the following files have been created in the Data_Preprocessing directory:
+  3. Verify Outputs: Confirm that the following files have been created in the Data_Preprocessing directory:
 
     - MERGEDpersonaldataset.csv / MERGEDpublicdataset.csv
     - Security_Artifacts/DP_activity_label_encoder.pkl
     - Security_Artifacts/DP_main_preprocessor.pkl (The scaling/encoding rules)
 
-  7. Deactivate Environment: **deactivate**
+  4. Deactivate Environment: **deactivate**
 
-Phase 2: Machine Learning Model (Baseline Comparison)
+**Phase 2: Machine Learning Model (Baseline Comparison)**
   This phase trains the simpler ML model for performance comparison (often using the same data and preprocessor rules).
   1. Activate Environment:
     - Navigate to the Machine_Learning_Model folder.
@@ -106,13 +106,13 @@ Phase 2: Machine Learning Model (Baseline Comparison)
 
       - python Machine_Learning.py
         
-  4. Verify Integrity: Run the integrity script to demonstrate security principles on the ML model's output (or data).
+  3. Verify Integrity: Run the integrity script to demonstrate security principles on the ML model's output (or data).
 
     - python SEC_verify_ML_integrity
     
-  5. Deactivate Environment: **deactivate**
+  4. Deactivate Environment: **deactivate**
 
-Phase 3: Deep Learning Model (Training and Security Demonstration)
+**Phase 3: Deep Learning Model (Training and Security Demonstration)**
   This phase uses the processed data to train the FFNN model, establishes the trusted hash, encrypts the assets, and verifies integrity.
 
   1. Activate Environment:
@@ -123,22 +123,22 @@ Phase 3: Deep Learning Model (Training and Security Demonstration)
       - Windows (CMD): **.\.venv\Scripts\activate.bat**
     
         
-  3. Run Main Model Script: Execute the DL script. This script will perform the full cycle (train, save, hash, encrypt, delete plaintext, decrypt, and verify).
+  2. Run Main Model Script: Execute the DL script. This script will perform the full cycle (train, save, hash, encrypt, delete plaintext, decrypt, and verify).
 
     - python Deep_Learning.py
     
-  4. Verify Security Outputs: Confirm the script has generated the following encrypted files (and deleted their plaintext .pkl / .keras counterparts):
+  3. Verify Security Outputs: Confirm the script has generated the following encrypted files (and deleted their plaintext .pkl / .keras counterparts):
 
     -  Security_Artifacts/DL_encrypted.keras.enc 
     -  Security_Artifacts/DL_alignment_rules.pkl.enc
     -  Security_Artifacts/DL_label_mapping.pkl.enc
     -  Security_Artifacts/DL_sha256_hash.txt (Contains the trusted fingerprint)
     
-  5. Test Verification (Optional): Run the verification script to ensure the security functions work independently.
+  4. Test Verification (Optional): Run the verification script to ensure the security functions work independently.
      
     - python SEC_verify_DL_integrity.py
     
-  7. Deactivate Environment: **deactivate**
+  5. Deactivate Environment: **deactivate**
 
 
 
