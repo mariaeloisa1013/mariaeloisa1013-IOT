@@ -5,9 +5,9 @@ Project Brief:
 The final deliverable includes a comparative performance analysis and a practical demonstration of cryptographic security measures applied directly to the trained AI assets.
 
 # Objectives & Findings
-- Objective	Proof Point	Security/Ethical Implication
+- Objective	Proof Point	Security: Ethical Implication
 - Model Comparison	DL (FFNN) achieved significantly higher F1-Scores than the ML baseline.	High Value: Confirms the data's utility for detailed profiling and surveillance.
-- Ethical Analysis	Quantifiable 0.00 F1-Score on minority classes (e.g., 'Workout').	Algorithmic Bias: Proves the ethical failure of centralized, imbalanced data collection.
+- Ethical Analysis	Quantifiable 0.00 F1-Score on minority classes (e.g., 'Run').	Algorithmic Bias: Proves the ethical failure of centralized, imbalanced data collection.
 - Asset Defense	Successful demonstration of Integrity Checks and AES Encryption on the final model files.	Necessity: Demonstrates the practical defenses required to protect the high-value 'black-box' AI asset from tampering.
 
 # Setup and Installation
@@ -28,46 +28,45 @@ Install all necessary packages in one command:
 # Project Structure
 ```
 SECURINGTHEIOT_AS1/
-├── Data_Preprocessing/                   # PHASE 1: Data Cleaning, Feature Engineering, and Anonymization
-│   ├── .venv/                            # Python Environment (for each folder, since this was worked in sections by multiple members)
-|   |
-│   ├── Personal_Data/                    # Folder for personal/anonymous raw data
-│   │   ├── anon1.csv                     # Raw Anonymous Data Source 1
-│   │   ├── anon2.csv                     # Raw Anonymous Data Source 2
-│   │   ├── anon3.csv                     # Raw Anonymous Data Source 3
-│   │   ├── Clean_DateFormat.py           # Script to standardize date/time formats
-│   │   └── PSDataset_Cleaning.py         # Script for merging, cleaning, and feature engineering Personal Data
-|   |
-│   ├── Public_Data/                      # Folder for publicly sourced raw data
-│   │   ├── PBDataset_Cleaning.py         # Script for merging, cleaning, and feature engineering Public Data
-│   │   ├── public1.csv                   # Raw Public Data Source 1
-│   │   ├── public2.csv                   # Raw Public Data Source 2
-│   │   ├── public3.csv                   # Raw Public Data Source 3
-│   │   └── public4.csv                   # Raw Public Data Source 4
-│   ├── FINALPersonalDataset.csv          # Final output: Cleaned and processed Personal Data CSV
-│   ├── FINALPublicDataset.csv            # Final output: Cleaned and processed Public Data CSV
-│   ├── LabelEncoder.pkl                  # Saved object for decoding Activity Type (used by models)
-│   └── PreProcessor.pkl                  # Saved feature scaling/encoding rules (StandardScaler, OHE)
+├── .venv/                              # Isolated Python environment for dependency management
 |
-├── Deep_Learning_Model/                  # PHASE 2: DL Model Training, Security Hardening, and Verification
-│   ├── .venv/                            
-│   ├── encryption_salt.bin               # Unique salt used for key derivation (part of symmetric encryption)
-│   ├── label_encoder.pkl.enc             # Encrypted copy of the LabelEncoder object (Confidentiality At Rest)
-│   ├── model_integrity_hash.txt          # File storing the trusted SHA-256 hash (Defense against Tampering)
-│   ├── preprocessor.pkl.enc              # Encrypted copy of the preprocessing rules (Confidentiality At Rest)
-│   ├── strava_activity_classify.keras.enc# Encrypted trained FFNN model file (The high-value AI asset)
-│   ├── Strava_DL.py                      # Main script for training the FFNN model and applying security demos
-│   └── VerifyRun.py                      # Script to test security functions independently
+├── Data_Preprocessing/                 # PHASE 1: Data Cleaning, Merging, and Initial Transformation
+│   ├── Personal_Data/                  # Source folder for raw, anonymous personal data files
+│   │   ├── MariaButaslac.csv           
+│   │   ├── HyacinthToribio.csv        
+│   │   └── SofiaBorcelo.csv            
+│   ├── Public_Data/                    # Source folder for external, large-scale public data files
+│   │   ├── public1.csv                
+│   │   ├── public2.csv                 
+│   │   ├── public3.csv                 
+│   │   └── public4.csv                
+│   ├── Clean_DateFormat.py             # Script to handle initial date/time string format inconsistencies
+│   ├── Merge&PreProcessor.py           # Script to merge all raw data, clean, impute, and generate baseline artifacts
+│   ├── MERGEDpersonaldataset.csv       # FINAL processed and scaled personal test set (Data Output)
+│   └── MERGEDpublicdataset.csv         # FINAL processed and scaled public training set (Data Output)
 |
-├── Machine_Learning_Model/               # PHASE 3: ML Model Training and Verification (Baseline Comparison)
-│   ├── __pycache__/                      
-│   ├── .venv/                            
-│   ├── SecuredData.csv                   # Data file specific to the ML Model (optional, but often used)
-│   ├── SecurityLibrary.py                # Library containing security functions (hashing, encryption, etc.)
-│   ├── Strava_ML.py                      # Main script for training the ML baseline model (e.g., Random Forest)
-│   └── VerifyIntegrity.py                # Script to test integrity check on the ML model/data
-├── .gitattributes                    
-└── README.md                             
+├── Deep_Learning_Model/                # PHASE 2: Deep Learning Model Training and Security Implementation
+│   ├── Deep_Learning.py                # Main DL model: Loads data, aligns features, trains 1D CNN, and implements security concepts
+│   ├── SEC_verify_DL_integrity.py      # Script to verify the integrity of the SecuredData.csv (uses HMAC key)
+|
+├── Machine_Learning_Model/             # PHASE 3: Traditional ML Model Training and Core Security Functions
+│   ├── __pycache__/                    
+│   ├── Machine_Learning.py             # Main ML model: Trains Random Forest on public data and runs integrity checks
+│   ├── SEC_library.py                  # Core secuurity script: Contains HMAC generation, Fernet encryption/decryption functions, Key Derivation Functions
+│   └── SEC_verify_ML_integrity.py      # Script to verify the integrity of the Traditional ML model artifacts 
+|
+├── Security_Artifacts/                 # PHASE 4: Repository for all ENCRYPTED model logic and audit records
+│   ├── DL_alignment_record.pkl         # Final list of common features used in the DL model
+│   ├── DL_alignment_rules.pkl.enc      # DL Preprocessor (Master Scaling/OHE Rules)
+│   ├── DL_encrypted.keras.enc          # Deep Learning Model (The Prediction Engine/IP)
+│   ├── DL_encryption_salt.bin          # Salt file used for key derivation for encryption
+│   ├── DL_label_mapping.pkl.enc        # Label Encoder (Activity Dictionary)
+│   ├── DL_sha256_hash.txt              # SHA-256 HASH of the unencrypted DL Model
+|   |
+│   ├── DP_activity_label_encoder.pkl   # Baseline Label Encoder from initial data fit (Preprocessing Artifact)
+│   └── DP_main_preprocessor.pkl        # Baseline Preprocessor from initial data fit (Preprocessing Artifact)
+|   |
+|   └── ML_encrypted_results.csv        # Encrypted ML prediction file (Contains Encrypted ID and Integrity MAC)                  
 ```
 
 
@@ -82,12 +81,11 @@ Phase 1: Data Preprocessing (Creating the Final Dataset)
       - macOS/Linux: **source .venv/bin/activate**
       - Windows (CMD): **.\.venv\Scripts\activate.bat**
   2. Run Cleaning Scripts: Execute the individual cleaning scripts. These scripts read the raw CSVs, apply transformations (imputation, scaling), and save the final clean CSVs.
-    - Personal Data: **python Personal_Data/PSDataset_Cleaning.py**
-    - Public Data: **python Public_Data/PBDataset_Cleaning.py**
+    - **python Data_Preprocessing/PreProcessor.py**
   3. Verify Outputs: Confirm that the following files have been created in the Data_Preprocessing directory:
-    - FINALPersonalDataset.csv / FINALPublicDataset.csv
-    - LabelEncoder.pkl
-    - PreProcessor.pkl (The scaling/encoding rules)
+    - MERGEDpersonaldataset.csv / MERGEDpublicdataset.csv
+    - Security_Artifacts/DP_activity_label_encoder.pkl
+    - Security_Artifacts/DP_main_preprocessor.pkl (The scaling/encoding rules)
   4. Deactivate Environment: **deactivate**
 
 Phase 2: Machine Learning Model (Baseline Comparison)
@@ -98,9 +96,9 @@ Phase 2: Machine Learning Model (Baseline Comparison)
       - macOS/Linux: **source .venv/bin/activate**
       - Windows (CMD): **.\.venv\Scripts\activate.bat**
   2. Run ML Script: Execute the ML training script.
-      - **python Strava_ML.py**
+      - **python Machine_Learning.py**
   3. Verify Integrity: Run the integrity script to demonstrate security principles on the ML model's output (or data).
-    - **python VerifyIntegrity.py**
+    - **python SEC_verify_ML_integrity**
   4. Deactivate Environment: **deactivate**
 
 Phase 3: Deep Learning Model (Training and Security Demonstration)
@@ -112,17 +110,17 @@ Phase 3: Deep Learning Model (Training and Security Demonstration)
       - macOS/Linux: **source .venv/bin/activate**
       - Windows (CMD): **.\.venv\Scripts\activate.bat**
   2. Run Main Model Script: Execute the DL script. This script will perform the full cycle (train, save, hash, encrypt, delete plaintext, decrypt, and verify).
-    - **python Strava_DL.py**
+    - **python Deep_Learning.py**
   3. Verify Security Outputs: Confirm the script has generated the following encrypted files (and deleted their plaintext .pkl / .keras counterparts):
-    - strava_activity_classify.keras.enc
-    - label_encoder.pkl.enc
-    - preprocessor.pkl.enc
-    - model_integrity_hash.txt (Contains the trusted fingerprint)
+    - Security_Artifacts/DL_encrypted.keras.enc
+    - Security_Artifacts/DL_alignment_rules.pkl.enc
+    - Security_Artifacts/DL_label_mapping.pkl.enc
+    - Security_Artifacts/DL_sha256_hash.txt (Contains the trusted fingerprint)
   4. Test Verification (Optional): Run the verification script to ensure the security functions work independently.
-    - **python VerifyRun.py**
+    - **python SEC_verify_DL_integrity.py**
   5. Deactivate Environment: **deactivate**
 
 
 
 ---------------------------------
-This project was developed by **Maria Eloisa Butaslac, Hyacinth Ava Toribio, Sofia Lorin Borcelo** [CS Y3 WKND: GROUP 4]
+This project was developed by **Maria Eloisa Butaslac, Hyacinth Ava Toribio, Sofia Lorin Borcelo** [CS Y3: GROUP 4]
