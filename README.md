@@ -49,7 +49,7 @@ SECURINGTHEIOT_AS1/
 ├── Machine_Learning_Model/             # PHASE 2: Traditional ML Model Training and Core Security Functions
 │   ├── __pycache__/                    
 │   ├── Machine_Learning.py             # Main ML model: Trains Random Forest on public data and runs integrity checks
-│   ├── SEC_library.py                  # Core secuurity script: Contains HMAC generation, Fernet encryption/decryption functions, Key Derivation Functions
+│   ├── SEC_library.py                  # Core security script: Contains HMAC generation, Fernet encryption/decryption functions, Key Derivation Functions
 │   └── SEC_verify_ML_integrity.py      # Script to verify the integrity of the Traditional ML model artifacts 
 |
 ├── Deep_Learning_Model/                # PHASE 3: Deep Learning Model Training and Security Implementation
