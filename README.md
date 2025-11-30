@@ -46,15 +46,15 @@ SECURINGTHEIOT_AS1/
 │   ├── MERGEDpersonaldataset.csv       # FINAL processed and scaled personal test set (Data Output)
 │   └── MERGEDpublicdataset.csv         # FINAL processed and scaled public training set (Data Output)
 |
-├── Deep_Learning_Model/                # PHASE 2: Deep Learning Model Training and Security Implementation
-│   ├── Deep_Learning.py                # Main DL model: Loads data, aligns features, trains 1D CNN, and implements security concepts
-│   ├── SEC_verify_DL_integrity.py      # Script to verify the integrity of the SecuredData.csv (uses HMAC key)
-|
-├── Machine_Learning_Model/             # PHASE 3: Traditional ML Model Training and Core Security Functions
+├── Machine_Learning_Model/             # PHASE 2: Traditional ML Model Training and Core Security Functions
 │   ├── __pycache__/                    
 │   ├── Machine_Learning.py             # Main ML model: Trains Random Forest on public data and runs integrity checks
 │   ├── SEC_library.py                  # Core secuurity script: Contains HMAC generation, Fernet encryption/decryption functions, Key Derivation Functions
 │   └── SEC_verify_ML_integrity.py      # Script to verify the integrity of the Traditional ML model artifacts 
+|
+├── Deep_Learning_Model/                # PHASE 3: Deep Learning Model Training and Security Implementation
+│   ├── Deep_Learning.py                # Main DL model: Loads data, aligns features, trains 1D CNN, and implements security concepts
+│   ├── SEC_verify_DL_integrity.py      # Script to verify the integrity of the SecuredData.csv (uses HMAC key)
 |
 ├── Security_Artifacts/                 # PHASE 4: Repository for all ENCRYPTED model logic and audit records
 │   ├── DL_alignment_record.pkl         # Final list of common features used in the DL model
